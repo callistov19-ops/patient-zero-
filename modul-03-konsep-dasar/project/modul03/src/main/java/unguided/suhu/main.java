@@ -34,17 +34,5 @@ public class main {
         System.out.println("Isi array suhuHarian di main setelah isiDataKosong() dijalankan:");
         System.out.println(Arrays.toString(suhuHarian));
         System.out.println("(ikut berubah: constructor menyimpan referensi array yang sama)");
-
-
-        /*
-         * Penjelasan Perubahan Array pada main:
-         * Array di dalam bahasa Java termasuk ke dalam tipe data referensi (reference type)[cite: 1].
-         * Ketika array 'suhuHarian' dimasukkan ke dalam constructor 'PengolahSuhu', Java tidak
-         * menyalin isi elemen array secara terpisah, melainkan meneruskan referensi (alamat memori)
-         * dari array tersebut[cite: 1]. Oleh karena itu, variabel 'suhuHarian' di 'main' dan field
-         * 'suhuHarian' di dalam objek 'PengolahSuhu' merujuk pada objek array yang sama di memori[cite: 1].
-         * Perubahan nilai yang dilakukan oleh method 'isiDataKosong()' pada objek otomatis membuat
-         * array di 'main' ikut berubah[cite: 1].
-         */
     }   
 }
