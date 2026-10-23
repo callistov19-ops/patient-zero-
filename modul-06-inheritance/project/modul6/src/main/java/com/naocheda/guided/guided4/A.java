@@ -1,0 +1,7 @@
+package com.naocheda.guided.guided4;
+
+public class A {
+    public void tampilkanKeLayar() {
+        System.out.println("Method milik class A dipanggil...");
+    }
+}
