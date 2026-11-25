@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hasil Eksperimen Model</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main class="dashboard">
+        <!-- Header Utama -->
+        <header class="header-banner">
+            <span class="badge">EXPERIMENT LOG &bull; CLASSIFICATION</span>
+            <h1>Laporan Evaluasi Model Machine Learning</h1>
+            <h2>Perbandingan Model Klasifikasi</h2>
+        </header>
+
+        <!-- Zona Tengah: Tabel Evaluasi -->
+        <section class="panel-tabel">
+            <table>
+                <thead>
+                    <tr>
+                        <th rowspan="2">Model</th>
+                        <th colspan="3">Metrik Evaluasi (%)</th>
+                    </tr>
+                    <tr>
+                        <th>Akurasi</th>
+                        <th>Presisi</th>
+                        <th>Recall</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Logistic Regression</td>
+                        <td>82</td>
+                        <td>80</td>
+                        <td>78</td>
+                    </tr>
+                    <tr>
+                        <td>Decision Tree</td>
+                        <td>85</td>
+                        <td>83</td>
+                        <td>84</td>
+                    </tr>
+                    <tr id="model-terbaik">
+                        <td>Random Forest</td>
+                        <td>91</td>
+                        <td>90</td>
+                        <td>89</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Zona Bawah: Bento Grid 2 Kolom -->
+        <div class="bento-grid">
+            <!-- Kolom Kiri: Kesimpulan, Referensi, & Output JS -->
+            <div class="bento-left">
+                <section class="card-info">
+                    <h3>Kesimpulan Eksperimen</h3>
+                    <ul>
+                        <li>Random Forest merupakan model <span class="highlight-terbaik">terbaik</span> dengan capaian akurasi tertinggi sebesar 91%.</li>
+                        <li>Logistic Regression mencatat nilai recall terendah dibandingkan model lainnya, yakni sebesar 78%.</li>
+                    </ul>
+                    <div class="referensi">
+                        <span>Referensi Algoritma:</span>
+                        <a href="https://scikit-learn.org" target="_blank">Dokumentasi Scikit-Learn &nearr;</a>
+                    </div>
+                </section>
+
+                <section class="hasil-js">
+                    <h3>Ringkasan Komputasi JavaScript</h3>
+                    <p id="teks-rata-rata"></p>
+                    <p id="teks-model-terbaik"></p>
+                </section>
+            </div>
+
+            <!-- Kolom Kanan: Form Cari Model (Kotak Abu-abu Muda) -->
+            <section class="form-container">
+                <h3>Cari Model</h3>
+                <form action="#" method="POST">
+                    <div class="form-group">
+                        <label for="input-nama-model">Nama Model</label>
+                        <input type="text" id="input-nama-model" name="nama_model" placeholder="Contoh: Random Forest">
+                    </div>
+
+                    <div class="form-group">
+                        <span class="label-grup">Metrik Evaluasi</span>
+                        <div class="radio-group">
+                            <div class="radio-item">
+                                <input type="radio" id="metrik-akurasi" name="metrik" value="Akurasi">
+                                <label for="metrik-akurasi">Akurasi</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" id="metrik-presisi" name="metrik" value="Presisi">
+                                <label for="metrik-presisi">Presisi</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" id="metrik-recall" name="metrik" value="Recall">
+                                <label for="metrik-recall">Recall</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="select-jenis-data">Jenis Data</label>
+                        <select id="select-jenis-data" name="jenis_data">
+                            <option value="Training">Training</option>
+                            <option value="Validasi">Validasi</option>
+                            <option value="Testing" selected>Testing</option>
+                        </select>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="reset" class="btn-reset">Reset</button>
+                        <button type="submit" class="btn-submit">Cari Model</button>
+                    </div>
+                </form>
+                <div id="hasil-pencarian" class="search-result" style="display: none;"></div>
+            </section>
+        </div>
+    </main>
+
+    <script>
+        // 1. Array akurasi ketiga model
+        var akurasiModel = [82, 85, 91];
+
+        // 2. Fungsi menghitung rata-rata menggunakan perulangan
+        function hitungRataRata(daftarNilai) {
+            var total = 0;
+            for (var i = 0; i < daftarNilai.length; i++) {
+                total += daftarNilai[i];
+            }
+            var rataRata = total / daftarNilai.length;
+            return rataRata.toFixed(2);
+        }
+
+        // 3. Menampilkan hasil rata-rata pada halaman & console
+        var hasilRataRata = hitungRataRata(akurasiModel);
+        var kalimatRataRata = "Rata-rata akurasi: " + hasilRataRata + "%";
+        document.getElementById("teks-rata-rata").textContent = kalimatRataRata;
+        console.log(kalimatRataRata);
+
+        // 4. Objek model terbaik & menampilkan nama modelnya pada halaman
+        var modelTerbaik = {
+            nama: "Random Forest",
+            akurasi: 91
+        };
+        var kalimatModelTerbaik = "Model terbaik: " + modelTerbaik.nama + " (" + modelTerbaik.akurasi + "%)";
+        document.getElementById("teks-model-terbaik").textContent = kalimatModelTerbaik;
+        console.log(kalimatModelTerbaik);
+
+        // 5. Simulasi pencarian model dinamis sesuai Metrik & Jenis Data
+        var daftarModel = [
+            {
+                nama: "Logistic Regression",
+                Training: { Akurasi: 87, Presisi: 85, Recall: 83 },
+                Validasi: { Akurasi: 84, Presisi: 82, Recall: 80 },
+                Testing:  { Akurasi: 82, Presisi: 80, Recall: 78 }
+            },
+            {
+                nama: "Decision Tree",
+                Training: { Akurasi: 94, Presisi: 93, Recall: 92 },
+                Validasi: { Akurasi: 88, Presisi: 86, Recall: 86 },
+                Testing:  { Akurasi: 85, Presisi: 83, Recall: 84 }
+            },
+            {
+                nama: "Random Forest",
+                Training: { Akurasi: 98, Presisi: 97, Recall: 97 },
+                Validasi: { Akurasi: 93, Presisi: 92, Recall: 91 },
+                Testing:  { Akurasi: 91, Presisi: 90, Recall: 89 }
+            }
+        ];
+
+        var formCari = document.querySelector("form");
+        var boxHasil = document.getElementById("hasil-pencarian");
+        var inputNama = document.getElementById("input-nama-model");
+        var selectJenis = document.getElementById("select-jenis-data");
+        var radioMetrik = document.querySelectorAll('input[name="metrik"]');
+
+        function jalankanPencarian() {
+            var keyword = inputNama.value.trim().toLowerCase();
+            var metrikRadio = document.querySelector('input[name="metrik"]:checked');
+            var jenisData = selectJenis.value;
+
+            var modelDitemukan = null;
+            if (keyword !== "") {
+                for (var i = 0; i < daftarModel.length; i++) {
+                    if (daftarModel[i].nama.toLowerCase().indexOf(keyword) !== -1) {
+                        modelDitemukan = daftarModel[i];
+                        break;
+                    }
+                }
+            }
+
+            boxHasil.style.display = "block";
+
+            if (modelDitemukan) {
+                var metrikFokus = metrikRadio ? metrikRadio.value : "Akurasi";
+                var nilaiMetrik = modelDitemukan[jenisData][metrikFokus];
+
+                boxHasil.className = "search-result";
+                boxHasil.innerHTML =
+                    '<div class="result-header">' +
+                        '<span class="result-title">' + modelDitemukan.nama + '</span>' +
+                        '<span class="result-tag">' + jenisData.toUpperCase() + '</span>' +
+                    '</div>' +
+                    '<div class="result-highlight">' +
+                        metrikFokus + ': <strong>' + nilaiMetrik + '%</strong>' +
+                    '</div>';
+            } else {
+                boxHasil.className = "search-result not-found";
+                boxHasil.innerHTML =
+                    '<div class="result-title">Model tidak ditemukan</div>' +
+                    '<p class="result-desc">Ketik nama model yang tersedia: <strong>Logistic Regression</strong>, <strong>Decision Tree</strong>, atau <strong>Random Forest</strong>.</p>';
+            }
+        }
+
+        // Jalankan saat tombol Cari Model diklik
+        formCari.addEventListener("submit", function (event) {
+            event.preventDefault();
+            jalankanPencarian();
+        });
+
+        // Perbarui angka otomatis jika radio metrik atau dropdown jenis data diganti setelah mencari
+        selectJenis.addEventListener("change", function () {
+            if (boxHasil.style.display === "block") {
+                jalankanPencarian();
+            }
+        });
+
+        for (var j = 0; j < radioMetrik.length; j++) {
+            radioMetrik[j].addEventListener("change", function () {
+                if (boxHasil.style.display === "block") {
+                    jalankanPencarian();
+                }
+            });
+        }
+
+        // Sembunyikan kartu hasil saat tombol Reset diklik
+        formCari.addEventListener("reset", function () {
+            boxHasil.style.display = "none";
+            boxHasil.innerHTML = "";
+        });
+    </script>
+</body>
+</html>
